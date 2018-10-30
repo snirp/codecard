@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Proof of concept: client-side code editor and evaluation</title>
+<style type="text/css" media="screen">
+    body, html { 
+        margin: 0; 
+        font-family: sans-serif;
+        color: #444; }
+    h2 {
+        text-align: center;
+        padding-bottom: 1rem;
+        font-weight: normal;
+    }
+    .card p {
+        padding: 0 2rem 1rem;
+    }
+    .card { 
+        max-width: 800px;
+        margin: 2rem auto 0;
+        padding-top: 1rem;
+        border-radius: 6px;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        }
+    .card-question {
+        background-color: whitesmoke;
+        padding-top: 1rem;
+    }
+    .button-submit {
+        padding: 0.25rem;
+    }
+    #editor { height: 200px; }
+
+</style>
+<script>
+
+
+    
+</script>
+</head>
+<body>
+    <div class="card">
+        <h2>Example of card</h2>
+        <div class="card-content">
+            <p>
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. 
+                Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
+            </p>
+            <p>
+                Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. 
+                Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. 
+                Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. 
+                Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. 
+                Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. 
+                Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. 
+                Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui.
+            </p>
+        </div>
+        <div class="card-question">
+            <p>
+                Edit the function <code>square</code>, so that it returns the square value of x.
+            </p>
+            <div id="editor"></div>
+            <p>
+                <button class="button-submit" onclick="evalEditor()">Submit code</button>
+                <button class="button-submit" onclick="solveEditor()">Show solution</button>
+                <button class="button-submit" onclick="resetEditor()">Reset</button>
+            </p>
+        </div>
+    </div>
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.1/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    const initialCode = `function square(x) {
+    // enter code here:
+    return ;
+}`
+    const correctCode = `function square(x) {
+    return x * x;
+}`
+
+    const editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/javascript");
+
+    function resetEditor () {
+        editor.setValue(initialCode);
+    };
+
+    function solveEditor () {
+        editor.setValue(correctCode);
+    }
+
+    const testSuite = [
+        [[4], 16],
+        [[0], 0],
+        [[-2], 4],
+        [[10], 10000],
+        [[0.5], 0.25]
+    ]
+
+    function testCode() {
+        eval(editor.getValue());
+        for (let test of testSuite) {
+
+            if (square.apply(null, test[0]) !== test[1] ) {
+                return `Test failed with argument(s): ${test[0]}. 
+Expected ${test[1]}, but got ${square.apply(null, test[0])} instead.`
+            }
+        };
+        return "success!"
+    }
+
+    function evalEditor() {
+        alert(testCode());
+    }
+
+
+
+    resetEditor();  // To set initial code sample
+
+</script>
+</body>
+</html>
