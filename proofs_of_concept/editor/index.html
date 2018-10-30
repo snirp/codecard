@@ -32,11 +32,7 @@
     #editor { height: 200px; }
 
 </style>
-<script>
 
-
-    
-</script>
 </head>
 <body>
     <div class="card">
@@ -95,14 +91,13 @@
         [[4], 16],
         [[0], 0],
         [[-2], 4],
-        [[10], 10000],
+        [[100], 10000],
         [[0.5], 0.25]
     ]
 
     function testCode() {
-        eval(editor.getValue());
+        eval(editor.getValue());  // This adds the `square` function
         for (let test of testSuite) {
-
             if (square.apply(null, test[0]) !== test[1] ) {
                 return `Test failed with argument(s): ${test[0]}. 
 Expected ${test[1]}, but got ${square.apply(null, test[0])} instead.`
@@ -114,8 +109,6 @@ Expected ${test[1]}, but got ${square.apply(null, test[0])} instead.`
     function evalEditor() {
         alert(testCode());
     }
-
-
 
     resetEditor();  // To set initial code sample
 
